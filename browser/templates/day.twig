@@ -1,0 +1,12 @@
+{% extends 'base.twig' %}
+{% block content %}
+    <table>
+    {% for program in programs %}
+        <tr>
+            <td>{{ program.attributes.start|time }}</td>
+            <td>{{ program.attributes.stop }}|time</td>
+            <td>{{ program.desc }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

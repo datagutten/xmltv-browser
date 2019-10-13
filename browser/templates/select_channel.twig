@@ -1,0 +1,11 @@
+{% extends 'base.twig' %}
+{% block content %}
+    <h2>Select channel</h2>
+    <ul>
+    {% for id, channel in channels %}
+        <li>
+        <a href="?channel={{ id }}">{{ channel }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

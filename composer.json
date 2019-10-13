@@ -1,0 +1,27 @@
+{
+    "name": "datagutten/xmltv-browser",
+    "description": "Browse XMLTV data",
+    "type": "project",
+    "require": {
+        "twig/twig": "^2.11",
+        "datagutten/xmltvtools": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4"
+    },
+    "suggest": {
+        "datagutten/dreambox-utils": "Add timers to a dreambox"
+    },
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "datagutten",
+            "email": "datagutten@datagutten.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "datagutten\\xmltv\\browser\\": "browser"
+        }
+    }
+}

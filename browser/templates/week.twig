@@ -1,0 +1,27 @@
+{% extends 'base.twig' %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ root }}/static/week.css" />
+{% endblock %}
+{% block nav_bar %}
+    <li><a href="?" class="toc">Change channel</a></li>
+{% endblock %}
+{% block content %}
+    <table>
+        {% for day in days %}
+            <tr>
+                <td>{{ day|weekday|nl2br }}</td>
+            {% for program in day %}
+            <td>
+                {{ program.attributes.start|time }}
+                {% if program.attributes.stop %}
+                    - {{ program.attributes.stop|time }}
+                {% endif %}
+            <hr />
+                <span title="{{ program.desc }}">{{ program.title }}</span>
+                <a title="Show only {{ program.title }}" href="?channel={{ channel }}&program={{ program.title }}">*</a><br />
+            {{ program|episode }}
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,37 @@
+table, th, td {
+    border: 1px solid black;
+}
+
+.nav_bar {
+    /*background-color: #f8f8f8;*/
+    /*border-color: #e7e7e7;
+    position: relative;*/
+    min-height: 40px;
+    /*margin-bottom: 20px;*/
+    /*border: 1px solid transparent;*/
+}
+
+/* Navigation bar at the top of each page */
+ul.toc li {
+    width: auto;
+    height: 100%;
+    padding: 10px;
+    /*background-color: #e7e7e7;*/
+    background-color: gray;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    float: left;
+    text-align: center;
+    list-style-type: none;
+    font-weight: bold;
+    color: white;
+}
+ul.toc li:last-of-type {
+    border-right: 1px solid black;
+}
+
+a.toc {
+    color: white;
+    /*text-decoration: none;*/
+}
