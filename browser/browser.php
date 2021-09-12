@@ -6,6 +6,7 @@ namespace datagutten\xmltv\browser;
 
 use datagutten\xmltv\tools\common;
 use datagutten\xmltv\tools\exceptions\ChannelNotFoundException;
+use datagutten\xmltv\tools\parse\parser;
 use Twig;
 
 class browser
@@ -21,13 +22,20 @@ class browser
      */
     public $channel_info;
 
-    function __construct()
+    /**
+     * @var parser
+     */
+    public $xmltv;
+
+    function __construct($config)
     {
         $loader = new Twig\Loader\FilesystemLoader(array('templates'), __DIR__);
         $this->twig = new Twig\Environment($loader, array('debug' => true, 'strict_variables' => true));
         $this->twig->addFilter(new Twig\TwigFilter('time', array($this, 'time')));
-        $this->files = new common\files();
         $this->channel_info = new common\channel_info();
+        $this->xmltv = new parser($config['xmltv_path'], $config['xmltv_sub_folders']);
+        $this->files = $this->xmltv->files;
+        $this->twig->addFilter(new Twig\TwigFilter('xml_strtotime', array($this->xmltv, 'strtotime')));
     }
     /**
      * Renders a template.
@@ -68,7 +76,7 @@ class browser
     }
     public function time($time)
     {
-        $time = strtotime($time);
+        $time = $this->xmltv->strtotime($time);
         return date('H:i', $time);
     }
 
@@ -87,10 +95,8 @@ class browser
             if(!is_dir($this->files->xmltv_path.'/'.$channel))
                 continue;
 
-            $sub_folders = array_merge([$this->files->default_sub_folder], $this->files->alternate_sub_folders);
-
             $valid = false;
-            foreach ($sub_folders as $sub_folder)
+            foreach ($this->files->sub_folders as $sub_folder)
             {
                 if(file_exists($this->files->xmltv_path.'/'.$channel.'/'.$sub_folder)) {
                     $valid = true;

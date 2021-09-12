@@ -6,8 +6,11 @@ use datagutten\xmltv\tools\exceptions\InvalidXMLFileException;
 use datagutten\xmltv\tools\parse;
 use Twig\TwigFilter;
 
-$xmltv = new parse\parser;
-$browser = new browser();
+$config = require 'config.php';
+$browser = new browser($config);
+$xmltv = $browser->xmltv;
+$browser->xmltv->ignore_timezone = false;
+
 //http://zetcode.com/php/twig/
 $browser->twig->addFilter(new TwigFilter('episode', array($xmltv, 'season_episode')));
 function format_day($day)
