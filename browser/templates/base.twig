@@ -5,20 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ title|default('XMLTV') }}</title>
     <link rel="stylesheet" type="text/css" href="{{ root }}/static/browser.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     {% block head %}
     {% endblock %}
 </head>
 
 <body>
-<div class="nav_bar">
-    <ul class="toc">
-        <li><a href="{{ root }}/day.php" class="toc">Day</a></li>
-        <li><a href="{{ root }}/week.php" class="toc">Week</a></li>
-        {% block nav_bar %} {% endblock %}
-    </ul>
+<div>
+    <a class="btn btn-primary" role="button" href="?">Select channel</a>
+    {% if channel is defined %}
+        <a class="btn btn-primary" role="button" href="{{ root }}/day.php?channel={{ channel }}">Day</a>
+        <a class="btn btn-primary" role="button" href="{{ root }}/week.php?channel={{ channel }}">Week</a>
+    {% endif %}
+    {% block nav_bar %} {% endblock %}
+
+    {% if sources is defined and sources|length>1 %}
+
+        {% for source in sources %}
+            <a class="btn btn-secondary"
+               role="button" href="?channel={{ channel }}&sub_folder={{ source }}{% if program_filter %}&program={{ program_filter }}"{% endif %}">{{ source }}</a>
+        {% endfor %}
+
+    {% endif %}
 </div>
 <br>
 <hr>
+<h2>{{ title|default("") }}</h2>
 {% block content %} {% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
 </body>
 </html>

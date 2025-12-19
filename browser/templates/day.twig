@@ -1,12 +1,25 @@
 {% extends 'base.twig' %}
 {% block content %}
-    <table>
-    {% for program in programs %}
+    <table class="table-bordered">
         <tr>
-            <td>{{ program.attributes.start|time }}</td>
-            <td>{{ program.attributes.stop }}|time</td>
-            <td>{{ program.desc }}</td>
+            <th>Time</th>
+            <th>Title</th>
+            <th>Episode</th>
+            <th>Sub-title</th>
+            <th>Description</th>
         </tr>
-    {% endfor %}
+        {% for program in programs %}
+            <tr>
+                <td>{{ program.start }}</td>
+                <td>{{ program.title }}</td>
+                {% if program.season is defined %}
+                    <td>{{ program.formatEpisode }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                <td>{{ program.sub_title }}</td>
+                <td>{{ program.description }}</td>
+            </tr>
+        {% endfor %}
     </table>
 {% endblock %}

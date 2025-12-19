@@ -4,6 +4,7 @@
 namespace datagutten\xmltv\browser;
 
 
+use datagutten\tools\files\files as file_tools;
 use datagutten\xmltv\tools\common;
 use datagutten\xmltv\tools\exceptions\ChannelNotFoundException;
 use datagutten\xmltv\tools\parse\parser;
@@ -37,6 +38,35 @@ class browser
         $this->files = $this->xmltv->files;
         $this->twig->addFilter(new Twig\TwigFilter('xml_strtotime', array($this->xmltv, 'strtotime')));
     }
+
+    /**
+     * Get available data sources for a channel on a given date
+     * @param string $channel
+     * @param int $timestamp
+     * @return array Source sub folder names
+     */
+    public function sources(string $channel, int $timestamp): array
+    {
+        $sources = [];
+        $base_folder = file_tools::path_join($this->files->xmltv_path, $channel);
+        $sub_folders = file_tools::sub_folders($base_folder);
+        foreach ($sub_folders as $folder)
+        {
+            if (str_contains($folder, 'raw_data'))
+                continue;
+            $source = basename($folder);
+            //$file = common\filename::file_path($channel, $source, $timestamp, 'xml');
+            $year_folder = file_tools::path_join($folder, date('Y', $timestamp));
+            if (!file_exists($year_folder))
+                continue;
+            $file = common\filename::filename($channel, $timestamp, 'xml');
+            $file = file_tools::path_join($year_folder, $file);
+            if (file_exists($file))
+                $sources[] = $source;
+        }
+        return $sources;
+    }
+
     /**
      * Renders a template.
      *
@@ -49,7 +79,9 @@ class browser
     public function render($name, $context)
     {
         $context = array_merge($context, array(
-            'root'=>$this->root));
+            'root'=>$this->root,
+            'program_filter' => $_GET['program'] ?? null,
+            'today' => date('Y-m-d')));
         try {
             return $this->twig->render($name, $context);
         }
@@ -121,4 +153,13 @@ class browser
         asort($channel_list);
         return $channel_list;
     }
+
+    public function render_channel_list(): string
+    {
+        return $this->render('select_channel.twig', array(
+            'channels' => $this->channel_list(),
+            'sources' => [],
+        ));
+    }
+
 }

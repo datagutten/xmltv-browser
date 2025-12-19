@@ -2,3 +2,7 @@ td {
     vertical-align: top;
     min-width: 90px;
 }
+
+.week {
+    font-size: 13px;
+}

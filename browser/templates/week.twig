@@ -1,26 +1,28 @@
 {% extends 'base.twig' %}
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{{ root }}/static/week.css" />
-{% endblock %}
-{% block nav_bar %}
-    <li><a href="?" class="toc">Change channel</a></li>
+    <link rel="stylesheet" type="text/css" href="{{ root }}/static/week.css"/>
 {% endblock %}
 {% block content %}
-    <table>
+    <table class="table table-bordered border-primary week">
         {% for day in days %}
-            <tr>
-                <td>{{ day|weekday|nl2br }}</td>
-            {% for program in day %}
-            <td>
-                {{ program.attributes.start|time }}
-                {% if program.attributes.stop %}
-                    - {{ program.attributes.stop|time }}
-                {% endif %}
-            <hr />
-                <span title="{{ program.desc }}">{{ program.title }}</span>
-                <a title="Show only {{ program.title }}" href="?channel={{ channel }}&program={{ program.title }}">*</a><br />
-            {{ program|episode }}
-            {% endfor %}
+            <tr class="program">
+                <th><a href="day.php?channel={{ channel }}&date={{ day|isodate }}">{{ day|weekday|nl2br }}</a></th>
+                {% for program in day %}
+                <td class="pb-0 pt-0 py-0 ps-1 pe-0">
+                    {{ program.header_web|nl2br }}&nbsp;<a title="Show only {{ program.title }}"
+                                                           href="?channel={{ channel }}&program={{ program.title }}">*</a><br/>
+                    <hr/>
+
+                    {% if program_filter %}
+                        <p>{{ program.description }}</p>
+                        {% if program.sub_title is defined %}
+                            <p>{{ program.sub_title }}</p>
+                        {% endif %}
+                    {% else %}
+                        {{ program.sub_title }}
+                    {% endif %}
+
+                    {% endfor %}
             </tr>
         {% endfor %}
     </table>
