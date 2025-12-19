@@ -14,11 +14,18 @@ if (empty($channel))
     echo json_encode($this->channel_list());
 else
 {
-    $programs_xml = $browser->xmltv->get_programs($channel, $start);
-    $programs = array_map(function ($program)
+    try
     {
-        return Program::fromXMLTV($program);
-    }, $programs_xml);
+        $programs_xml = $browser->xmltv->get_programs($channel, $start);
+        $programs = array_map(function ($program)
+        {
+            return Program::fromXMLTV($program);
+        }, $programs_xml);
 
-    echo json_encode($programs);
+        echo json_encode($programs);
+    }
+    catch (Exception $e)
+    {
+        echo json_encode(['error' => $e->getMessage(), 'trace' => $e->getTrace()]);
+    }
 }
